@@ -39,23 +39,22 @@ exports.createUser = async (req,res)=>{
     }
 
  }
- exports.updateUser = async (req , res) => {
-        const id=req.user
-        const {username,email,phone,address}=req.body
-    
-        try {
-            const user = await  User.findByIdAndUpdate(id,{ username,email,phone,address})
-           //save
-            savedU = new User(user)
-        savedU.save()
-            res.status(200).json({message:'User update successfully'})
-          
 
-        } catch (error) {
-            res.status(500).json({message:error.message})
-        }
-        
+
+exports.updateUser= async (req,res)=>{
+    try {
+        const profileImage= req.file ? req.file.path : null;
+        const {username,email,phone,address,Fullname}=req.body;
+        const user = await User.findByIdAndUpdate(req.user,{username,email,profileImage,phone,address,Fullname}, {new:true});
+        if(!user)  res.status(404).json({msg:'User not Found'})
+            await user.save();
+         res.json({message:'User update successfully',user})
+
+    } catch (error) {
+        console.error('Error updating User',error.message)
+        res.status(500).json({msg:'Server error',error:error.message})
     }
+}
  exports.deleteUser = async (req , res) => {
         const {id}=req.params
        
@@ -68,27 +67,9 @@ exports.createUser = async (req,res)=>{
         
     }
     
-    //login
-    exports.login = async (req, res) => {
-        const {email, password}= req.body
-        try {
-            const user = await User.findOne({email:email})
-            if (!user){
-                return res.status(400).json({message:'User not found'})
-            }
-            const isMatch = await bcrypt.compare(password,user.password)
-            if (!isMatch){
-                return res.status(400).json({message:'Invalid password'})
-            }
-           const token = jwt.sign({userId:user._id,role:user.role},SECRET_KEY,{expiresIn:'24h'})
-            return res.status(200).json({message:'User logged in successfully'/*,user:user*/,token:token})
-        } catch (error) {
-           res.status(500).json({message:error.message}) 
-        }
-        
-    }
-   
-  // change password
+    
+
+
   exports.changePassword = async (req,res) =>{
     try {
         const {oldPassword ,newPassword}=req.body;
@@ -110,3 +91,52 @@ exports.createUser = async (req,res)=>{
         res.status(500).json({msg:'Server error', error:error.message})
     }
   }
+
+
+
+
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    
+    
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+     const payload = {
+      userId: user._id,
+      role: user.role 
+    };
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role,payload },
+      SECRET_KEY,
+      { expiresIn: '24h' }
+    );
+    return res.status(200).json({
+      message: 'User logged in successfully',
+      token: token,
+      user: {
+        _id: user._id,
+        role: user.role,
+        username: user.username,
+        email: user.email,
+        
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+

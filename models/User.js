@@ -6,12 +6,13 @@ const UserSchema = new mongoose.Schema({
      phone:{type:Number,required: true},
     password:{type:String,required: true},
     role:{type:String,default:'user'},
-    profileImage:{type:String,required: false},
+    profileImage:{type:String,/*required: false*/ default: "default.png"},
     address:{type:String,required: true},
-    Fullname:{type:String,required: true}
+    Fullname:{type:String,required: true},
+   
+    createdAt:{type:Date,default: Date.now}
     
-    
-})
+},{timestamps:true});
 UserSchema.pre('save',async function (next)  {
     if(!this.isModified('password')) return next();
     try {

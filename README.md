@@ -1,7 +1,7 @@
 # MERNproject
 Galyah jehad Ikbariyeh
 Admin email:ghaliah@gmail.com
-Amin password:666666
+Admin password:666666
 Admin can
 Add, delete, and edit products.
 See which users are using the site.

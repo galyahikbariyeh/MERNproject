@@ -30,6 +30,8 @@ import User from './userUpdate';
 import PersonIcon from '@mui/icons-material/Person';
 import Order from './orderArchive';
 import MainDash from './mainDash';
+import ArchivedOrders  from './archive';
+import { Assignment } from '@mui/icons-material';
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
@@ -115,6 +117,10 @@ function DemoPageContent({ pathname , profileData}) {
       )
         
       }
+     {pathname === "/Archived" && (
+      <ArchivedOrders />
+)}
+
     </Box>
     
   );
@@ -219,6 +225,11 @@ function DashboardLayoutSlots(props) {
     segment: 'Order',
     title: 'Order',
     icon: <ShoppingCartIcon />,
+  },
+  {
+    segment: 'Archived',
+    title: 'Archived Orders',
+    icon: <Assignment />,
   },
  ]:[]),
    

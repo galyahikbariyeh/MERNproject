@@ -86,14 +86,14 @@ export default function AdminOrders() {
 
   return (
     <>
-    <Button
+    {/* <Button
   variant="contained"
   color="secondary"
   href="/arch"
   sx={{ mt: 2 }}
 >
   View Archived Orders
-</Button>
+</Button> */}
 
       <TableContainer component={Paper} sx={{ mt: 3 }}>
         {loading ? (

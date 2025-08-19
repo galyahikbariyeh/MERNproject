@@ -24,12 +24,13 @@ function App() {
         <Route path="/home" element={<Home/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/order" element={<Orders/>}/>
+
          <Route path="/details/:id" element={<ProductDetail/>}/>
      
          <Route path="/userpro" element={<UserProfile/>}/>
          <Route path="/fave" element={<Favorite/>}/>
         
-  <Route path="/arch" element={<ArchivedOrders/>}/>
+  {/* <Route path="/arch" element={<ArchivedOrders/>}/> */}
       </Routes>
     
     

@@ -30,14 +30,13 @@ export default function Home() {
   const [apiCategory, setApiCategory] = useState([]);
   const [addedProducts, setAddedProducts] = useState([]);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-
  
   const [page, setPage] = useState(1);    
   const itemsPerPage = 25;                
- 
 
   const navigate = useNavigate();
 
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,18 +51,31 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const handleChangePage = (event, value) => {
-    setPage(value);
-  };
-
   
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const res = await axios.get("http://localhost:5050/api/fav", {
+          headers: { Auth: localStorage.getItem("token") },
+        });
+        const favItems = res.data.items || res.data;
+        setFavoriteProducts(
+          favItems.map((item) => (item.product ? item.product._id : item._id))
+        );
+      } catch (err) {
+        console.error("Error fetching favorites:", err);
+      }
+    };
+    fetchFavorites();
+  }, []);
+
+  const handleChangePage = (event, value) => setPage(value);
+
   const filteredProducts = products.filter(
     (product) => !category || product.category._id === category
   );
 
-
   const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
-
 
   const displayedProducts = filteredProducts.slice(
     (page - 1) * itemsPerPage,
@@ -83,33 +95,35 @@ export default function Home() {
     });
   };
 
-  const addToFavorite = (productId) => {
-    axios.post("http://localhost:5050/api/add", { productId }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Auth': `${localStorage.getItem('token')}`
-      }
-    }).then(() => {
-      alert("Added to favorite");
-    }).catch(err => {
-      alert(err);
-    });
-  };
-
   const handleAddToCartClick = (productId) => {
     addToCart(productId);
     setAddedProducts(prev => [...prev, productId]);
-    setTimeout(() => {
-      setAddedProducts(prev => prev.filter(id => id !== productId));
-    }, 2000);
+    setTimeout(() => setAddedProducts(prev => prev.filter(id => id !== productId)), 2000);
   };
 
-  const handleFavoriteClick = (productId) => {
-    if (favoriteProducts.includes(productId)) {
-      setFavoriteProducts(prev => prev.filter(id => id !== productId));
-    } else {
-      setFavoriteProducts(prev => [...prev, productId]);
-      addToFavorite(productId);
+  
+  const handleFavoriteClick = async (productId) => {
+    try {
+      if (favoriteProducts.includes(productId)) {
+       
+        setFavoriteProducts(prev => prev.filter(id => id !== productId));
+       
+        await axios.delete(`http://localhost:5050/api/remove/${productId}`, {
+          headers: { Auth: localStorage.getItem("token") },
+        });
+      } else {
+       
+        setFavoriteProducts(prev => [...prev, productId]);
+       
+        await axios.post(
+          "http://localhost:5050/api/add",
+          { productId },
+          { headers: { Auth: localStorage.getItem("token") } }
+        );
+        alert('Add to favorites')
+      }
+    } catch (err) {
+      console.error("Error toggling favorite:", err.response?.data || err.message);
     }
   };
 
@@ -128,10 +142,7 @@ export default function Home() {
             id="category-select"
             value={category}
             label="Category"
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setPage(1); 
-            }}
+            onChange={(e) => { setCategory(e.target.value); setPage(1); }}
             sx={{ mb: 4, minWidth: 200 }}
           >
             <MenuItem value="">All</MenuItem>
@@ -140,7 +151,6 @@ export default function Home() {
             ))}
           </Select>
 
-          
           <Grid container spacing={4}>
             {displayedProducts.map((product) => {
               const isAdded = addedProducts.includes(product._id);
@@ -154,7 +164,7 @@ export default function Home() {
                       display: 'flex',
                       flexDirection: 'column',
                       transition: 'transform 0.3s',
-                      justifyContent: "space-between" ,
+                      justifyContent: "space-between",
                       width: 204,
                       '&:hover': { transform: 'scale(1.03)', boxShadow: '0 8px 25px rgba(0,0,0,0.2)' },
                     }}
@@ -167,23 +177,12 @@ export default function Home() {
                       onClick={() => navigate(`/details/${product._id}`)}
                     />
                     <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                      <Typography variant="h6" gutterBottom>
-                        {product.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
-                        {product.description}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {product.category.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {product.brand}
-                      </Typography>
-                      <Typography variant="subtitle1" color="primary" sx={{ mt: 1 }}>
-                        {product.price} JD
-                      </Typography>
+                      <Typography variant="h6" gutterBottom>{product.name}</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>{product.description}</Typography>
+                      <Typography variant="body2" color="text.secondary">{product.category.name}</Typography>
+                      <Typography variant="body2" color="text.secondary">{product.brand}</Typography>
+                      <Typography variant="subtitle1" color="primary" sx={{ mt: 1 }}>{product.price} JD</Typography>
 
-                     
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: "auto" }}>
                         <Button
                           variant="contained"
@@ -216,13 +215,12 @@ export default function Home() {
             })}
           </Grid>
 
-         
           {pageCount > 1 && (
             <Stack spacing={2} sx={{ mt: 4 }} alignItems="center">
               <Pagination
                 count={pageCount}
                 page={page}
-                onChange={handleChangePage}
+                onChange={(e, value) => setPage(value)}
                 color="primary"
                 variant="outlined"
                 shape="rounded"
@@ -235,8 +233,3 @@ export default function Home() {
     </>
   );
 }
-
-
-
-
-

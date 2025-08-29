@@ -80,13 +80,20 @@ const Cart = () => {
         {cart && cart.length > 0 ? (
           cart.map((item) => (
             <Grid item xs={12} sm={6} md={4} key={item.product._id}>
-              <Card sx={{ maxWidth: 345, mx: "auto", bgcolor: "#fff", boxShadow: 3 }}>
+              <Card sx={{ maxWidth: 345, mx: "auto", bgcolor: "#fff", boxShadow: 3,
+                height: 470,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        transition: 'transform 0.3s',
+                        width: 204,
+               }}>
                 <CardMedia
-                  sx={{ height: 180 }}
+                  // sx={{ height: 180 }}
+                  sx={{ height: 200, objectFit: 'cover', cursor: 'pointer' }}
                   image={`http://127.0.0.1:5050/uploads/${item.product.image}`}
                   title={item.product.name}
                 />
-                <CardContent>
+                <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: "bold" }}>
                     {item.product.name}
                   </Typography>

@@ -66,7 +66,7 @@ export default function Favorite() {
                   <Typography variant="h6">{product.description}</Typography>
                   <Typography variant="h6">{product.category.name}</Typography>
                   <Typography variant="h6">{product.brand}</Typography>
-                  <Typography>{product.price} JD</Typography>
+                  <Typography  color="primary">{product.price} JD</Typography>
                 </CardContent>
               </Card>
             </Grid>

@@ -145,6 +145,7 @@ export default function ProductDetail() {
                     <Typography variant="subtitle1">{p.category.name}</Typography>
                     <Typography variant="subtitle1">{p.brand}</Typography>
                     <Typography variant="body2" color="primary">{p.price} JD</Typography>
+                    
                   </CardContent>
                 </Card>
               </Grid>

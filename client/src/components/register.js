@@ -39,10 +39,10 @@ export default function Register() {
         minHeight: '100vh',
           backgroundSize: 'cover',      
     backgroundPosition: 'center', 
-    // backgroundRepeat: 'no-repeat',
-    // backgroundImage: `url('https://img.freepik.com/fotos-premium/eletrodomesticos-fogao-a-gas-tv-cinema-geladeira-ar-condicionado-micro-ondas_505080-1032.jpg')`,
+    backgroundRepeat: 'no-repeat',
+    backgroundImage: `url('https://yt3.googleusercontent.com/QsQ8U8ogWZhX2Kq1Nju9z3nGToSUwhAZRiIqnpdv7hdjnQwV0o2GLPwg9hHYR7PaZAScMR9f=s900-c-k-c0x00ffffff-no-rj')`,
         // bgcolor: '#94b6d9ff'
-         backgroundColor:'#1976d2',
+        //  backgroundColor:'#1976d2',
       }}
     >
       <Paper

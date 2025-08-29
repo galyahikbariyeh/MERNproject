@@ -37,6 +37,7 @@ export default function BasicTable() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5050/api/products');
+        
         setRows(response.data);
         const categoryRes = await axios.get('http://127.0.0.1:5050/api/category');
         setApiCategory(categoryRes.data);

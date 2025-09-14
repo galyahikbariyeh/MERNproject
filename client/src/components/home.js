@@ -24,19 +24,40 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Navbar from './navBar';
 import Footer from './footer';
 
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState('');
   const [apiCategory, setApiCategory] = useState([]);
   const [addedProducts, setAddedProducts] = useState([]);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
- 
   const [page, setPage] = useState(1);    
   const itemsPerPage = 25;                
-
   const navigate = useNavigate();
 
- 
+  
+  const carouselImages = [
+   
+    "https://png.pngtree.com/background/20230520/original/pngtree-pc-and-some-computers-sitting-on-a-desktop-picture-image_2673509.jpg",
+     "https://cdn.al-ain.com/lg/images/2024/1/28/195-211132-date-stability-price-electrical-appliances-egypt_700x400.jpg",
+    "https://media.elbalad.news/ArticleUpload/2024/11/30/iphone__kqge21l9n26q_611_080001.jpg",
+    "https://m.arabic.corrimacoffeemachine.com/photo/pt33453423-cafe_shop_corrima_coffee_machine_double_group_multi_boiler_550ml_3_in_1_coffee_maker.jpg"
+  ];
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +72,6 @@ export default function Home() {
     fetchData();
   }, []);
 
-  
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -101,20 +121,15 @@ export default function Home() {
     setTimeout(() => setAddedProducts(prev => prev.filter(id => id !== productId)), 2000);
   };
 
-  
   const handleFavoriteClick = async (productId) => {
     try {
       if (favoriteProducts.includes(productId)) {
-       
         setFavoriteProducts(prev => prev.filter(id => id !== productId));
-       
         await axios.delete(`http://localhost:5050/api/remove/${productId}`, {
           headers: { Auth: localStorage.getItem("token") },
         });
       } else {
-       
         setFavoriteProducts(prev => [...prev, productId]);
-       
         await axios.post(
           "http://localhost:5050/api/add",
           { productId },
@@ -130,10 +145,28 @@ export default function Home() {
   return (
     <>
       <Navbar />
+
+      
+      {page === 1 && (
+        <Container sx={{ mt: 2 }}>
+          <Slider {...sliderSettings}>
+            {carouselImages.map((img, index) => (
+              <Box key={index} sx={{ height: 300, overflow: "hidden" }}>
+                <img
+                  src={img}
+                  alt={`slide-${index}`}
+                  style={{ width: "100%", height: "300px", objectFit: "contain", borderRadius: 8 }}
+                />
+              </Box>
+            ))}
+          </Slider>
+        </Container>
+      )}
+
       <Box>
         <Container sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom align="center" color='#1976d2'>
-            All Products
+            {/* All Products */}
           </Typography>
 
           <InputLabel id="category-label">Category</InputLabel>
@@ -193,7 +226,8 @@ export default function Home() {
                             borderRadius: 2,
                             textTransform: 'none',
                             fontWeight: 'bold',
-                            fontSize: '13px',
+                            whiteSpace: 'nowrap', 
+                            fontSize: '14px',
                             '&:hover': { backgroundColor: isAdded ? '#2e7d32' : '#1565c0', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' },
                           }}
                           onClick={() => handleAddToCartClick(product._id)}
@@ -229,6 +263,7 @@ export default function Home() {
           )}
         </Container>
       </Box>
+
       <Footer />
     </>
   );

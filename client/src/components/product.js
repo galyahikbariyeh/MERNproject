@@ -136,7 +136,7 @@ export default function BasicTable() {
         </Select>
         <TextField label="Brand" fullWidth margin="normal" value={brand} onChange={(e) => setBrand(e.target.value)} />
         <Input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-        <Button variant="contained" color="primary" type="submit">Submit</Button>
+        <Button sx={{ borderRadius:6}}  variant="contained" color="primary" type="submit">Submit</Button>
       </form>
 
    

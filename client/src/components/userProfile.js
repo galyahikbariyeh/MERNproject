@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, TextField, Box, Typography, Modal, Card, CardContent, Avatar, Grid } from '@mui/material';
 import Navbar from './navBar';
+import PhoneIcon from "@mui/icons-material/Phone";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
 const style = {
   position: 'absolute',
   top: '50%',
@@ -107,9 +110,9 @@ export default function UserProfile() {
             />
             <Typography variant="h5">{profileData.username}</Typography>
             <Typography variant="body1" color="textSecondary">{profileData.email}</Typography>
-            <Typography variant="body2" color="textSecondary">Phone: {profileData.phone}</Typography>
-            <Typography variant="body2" color="textSecondary">Address: {profileData.address}</Typography>
-            <Typography variant="body2" color="textSecondary">Fullname: {profileData.Fullname}</Typography>
+            <Typography variant="body2" color="textSecondary"><PhoneIcon/>Phone: {profileData.phone}</Typography>
+            <Typography variant="body2" color="textSecondary"><HomeIcon/>Address: {profileData.address}</Typography>
+            <Typography variant="body2" color="textSecondary"><PersonIcon/>Fullname: {profileData.Fullname}</Typography>
           </Box>
 
           <Grid container spacing={2} justifyContent="center">

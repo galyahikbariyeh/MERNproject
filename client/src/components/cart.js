@@ -8,6 +8,8 @@ import Footer from "./footer";
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  
+
 
   useEffect(() => {
     fetchCart();
@@ -62,6 +64,7 @@ const Cart = () => {
       )
       .then((res) => {
         alert("Order placed successfully");
+         
         setCart([]);
         setTotal(0);
       })

@@ -185,6 +185,8 @@ export default function Home() {
           </Select>
 
           <Grid container spacing={4}>
+         
+
             {displayedProducts.map((product) => {
               const isAdded = addedProducts.includes(product._id);
               const isFavorite = favoriteProducts.includes(product._id);
@@ -199,6 +201,7 @@ export default function Home() {
                       transition: 'transform 0.3s',
                       justifyContent: "space-between",
                       width: 204,
+                      
                       '&:hover': { transform: 'scale(1.03)', boxShadow: '0 8px 25px rgba(0,0,0,0.2)' },
                     }}
                   >
